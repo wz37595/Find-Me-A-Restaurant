@@ -2,6 +2,7 @@
 from api import app
 from httpRequestHelper import TaskHelper
 from httpRequestHelper.HttpResponseGenerator import HttpResponse
+from exception import Exception
 from database import DatabaseHelper
 from flask import abort, request
 from log import Logger
@@ -23,13 +24,9 @@ def generateTaskId():
             logger.error(e)
             return abort(500, "Something wrong when set up the task")
 
-        status = DatabaseHelper.addTask(task_token, user_token)
         httpResponse = HttpResponse()
-        if status:
-            httpResponse.addData(key="taskToken", value=task_token)
-            return httpResponse.getResponse()
-        else:
-            return abort(200, "DataBase Error")
+        httpResponse.add_data(key="taskToken", value=task_token)
+        return httpResponse.get_response()
 
     return abort(404)
 
@@ -41,13 +38,13 @@ def checkTask():
         taskToken = request.json.get('TaskToken')
         userToken = request.json.get('UserToken')
         try:
-            status = DatabaseHelper.getTaskStatus(taskToken, userToken)
+            status = DatabaseHelper.get_task_status(taskToken, userToken)
         except Exception as e:
             return abort(500, "Something wrong when get the task status")
 
         httpResponse = HttpResponse()
-        httpResponse.addData(key='Task Status', value=status)
-        return httpResponse.getResponse()
+        httpResponse.add_data(key='Task Status', value=status)
+        return httpResponse.get_response()
     else:
 
         return abort(404)
@@ -62,13 +59,13 @@ def getResult():
         try:
             result = DatabaseHelper.getTaskResult(taskToken)
         except Exception as e:
-            httpResponse.addData("Status", 500)
-            httpResponse.addData("Message", "Something wrong when get the task result")
-            return httpResponse.getResponse()
-        httpResponse.addData(dict=result)
+            httpResponse.add_data("Status", 500)
+            httpResponse.add_data("Message", "Something wrong when get the task result")
+            return httpResponse.get_response()
+        httpResponse.add_data(dict=result)
     else:
-        httpResponse.addData("Status", 404)
-        return httpResponse.getResponse()
+        httpResponse.add_data("Status", 404)
+        return httpResponse.get_response()
 
 
 @app.route("/", methods=['GET', 'POST'])
