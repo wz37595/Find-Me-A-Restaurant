@@ -11,7 +11,7 @@ logger = Logger.getLogger("routes")
 
 
 @app.route("/task", methods=['POST'])
-def generateTaskId():
+def generate_task_id():
     logger.info('Received Request: %s', request.get_data())
     if request.method == 'POST':
         location = request.json.get('Location')
@@ -32,7 +32,7 @@ def generateTaskId():
 
 
 @app.route("/checktask", methods=['POST'])
-def checkTask():
+def check_task():
     logger.info('Received Request: %s', request.get_data())
     if request.method == 'POST':
         taskToken = request.json.get('TaskToken')
@@ -51,7 +51,7 @@ def checkTask():
 
 
 @app.route("/getresult", methods=['POST'])
-def getResult():
+def get_result():
     logger.info('Received Request: %s', request.get_data())
     httpResponse = HttpResponse()
     if request.method == 'POST':
@@ -66,6 +66,11 @@ def getResult():
     else:
         httpResponse.add_data("Status", 404)
         return httpResponse.get_response()
+
+
+@app.route("/dotask", method=['POST'])
+def do_task():
+    return 'Do Task'
 
 
 @app.route("/", methods=['GET', 'POST'])
