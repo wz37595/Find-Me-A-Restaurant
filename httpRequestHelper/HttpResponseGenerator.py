@@ -3,13 +3,20 @@ from log import Logger
 import json
 
 logger = Logger.getLogger("HttpResponse")
+
+
 class HttpResponse:
     def __init__(self):
         self.data = {}
         self.status = 200
+        self.data["Status"] = 200
 
-    def addData(self, key, value):
-        self.data[key] = value
+    def addData(self, key=None, value=None, dict=None):
+        if key and value:
+            self.data[key] = value
+
+        if dict:
+            self.data.update(dict)
 
     def setStatus(self, status):
         self.status = status

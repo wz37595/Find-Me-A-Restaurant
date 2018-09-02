@@ -11,3 +11,4 @@ def setUpTask(location, userToken, radius):
     radius = 50 if not radius else radius
     token = TokenGenerator.generateTaskToken(location, radius)
     return token
+
