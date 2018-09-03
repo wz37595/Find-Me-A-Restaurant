@@ -41,7 +41,11 @@ class Task(db.Model):
 
 class Restaurant(db.Model):
     RestaurantToken = db.Column(db.String(60), primary_key=True)
-    Score = db.Column(db.Integer)
+    Name = db.Column(db.String(30))
+    YelpScore = db.Column(db.Integer)
+    OurScore = db.Column(db.Integer)
+    ReviewCount = db.Column(db.Integer, default=0)
+    URL = db.Column(db.String(60), nullable=False)
     LastUpdateTime = db.Column(db.DateTime)
     CreatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     # TODO: AddMore Attributes later

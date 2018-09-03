@@ -19,7 +19,12 @@ def generate_task_id():
         radius = request.json.get('Radius')
 
         try:
-            task_token = TaskHelper.setUpTask(location, user_token, radius)
+            long = location['Longitude']
+            lat = location['Latitude']
+            if not long or not lat:
+                raise Exception.NoLocationError
+            task_token = TaskHelper.setUpTask(long, lat, user_token,
+                                              radius, search_string='Restaurant')
         except Exception as e:
             logger.error(e)
             return abort(500, "Something wrong when set up the task")
@@ -59,6 +64,7 @@ def get_result():
         try:
             result = DatabaseHelper.getTaskResult(taskToken)
         except Exception as e:
+            logger.info(e)
             httpResponse.add_data("Status", 500)
             httpResponse.add_data("Message", "Something wrong when get the task result")
             return httpResponse.get_response()
@@ -68,7 +74,7 @@ def get_result():
         return httpResponse.get_response()
 
 
-@app.route("/dotask", method=['POST'])
+@app.route("/dotask", methods=['POST'])
 def do_task():
     return 'Do Task'
 
